@@ -57,6 +57,20 @@ app.put("/api/movies/:movieId", (req, res) => {
   )
  });
 
+ app.delete("/api/movies/:id", (req,res) => {
+  const movieId = req.params.id;
+  connection.query("DELETE FROM movies WHERE id = ?", [movieId],
+  (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("😱 Error deleting a movie");
+    } else {
+      res.sendStatus(204);
+    }
+  }
+  );
+ })
+
 app.get("/api/users", (req, res) => {
   connection.query("SELECT * FROM users", (err, result) => {
     if (err) {
@@ -96,6 +110,20 @@ app.put("/api/users/:userId", (req, res) => {
     }
   )
  });
+
+ app.delete("/api/users/:id", (req,res) => {
+  const userId = req.params.id;
+  connection.query("DELETE FROM users WHERE id = ?", [userId],
+  (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("😱 Error deleting an user");
+    } else {
+      res.sendStatus(204);
+    }
+  }
+  );
+ })
 
 // app.get('/api/movies', (req, res) => {
 //   connection.promise().query("SELECT * FROM movies")

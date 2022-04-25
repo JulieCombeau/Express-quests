@@ -41,6 +41,22 @@ connection.query("INSERT INTO movies (title, director, year, color, duration) VA
 );
 });
 
+app.put("/api/movies/:movieId", (req, res) => {
+  const { movieId } = req.params;
+  const moviePropsToUpdate = req.body;
+  connection.query(
+    "UPDATE movies SET ? WHERE id = ?", [moviePropsToUpdate, movieId],
+    (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Error udating a movie')
+      } else {
+        res.status(200).send('Movie successfully udpated');
+      }
+    }
+  )
+ });
+
 app.get("/api/users", (req, res) => {
   connection.query("SELECT * FROM users", (err, result) => {
     if (err) {
@@ -64,6 +80,22 @@ app.post("/api/users", (req, res) => {
     }
   });
 });
+
+app.put("/api/users/:userId", (req, res) => {
+  const { userId } = req.params;
+  const userPropsToUpdate = req.body;
+  connection.query(
+    "UPDATE users SET ? WHERE id = ?", [userPropsToUpdate, userId],
+    (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Error udating a user')
+      } else {
+        res.status(200).send('User successfully udpated');
+      }
+    }
+  )
+ });
 
 // app.get('/api/movies', (req, res) => {
 //   connection.promise().query("SELECT * FROM movies")

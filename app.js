@@ -62,7 +62,9 @@ connection.query("INSERT INTO movies (title, director, year, color, duration) VA
     console.error(err);
     res.status(500).send('Error saving the movie')
   } else {
-    res.status(200).send('Movie successfully saved');
+    const id = result.insertId;
+    const createdMovie = { id, title, director, year, color, duration};
+    res.status(201).json(createdMovie);
   }
 }
 );
@@ -77,11 +79,13 @@ app.put("/api/movies/:movieId", (req, res) => {
       if (err) {
         console.error(err);
         res.status(500).send('Error udating a movie')
+      } else if (result.affectedRows === 0 ){
+        res.status(404).send(`Movie with id ${movieId} not found`)
       } else {
-        res.status(200).send('Movie successfully udpated');
+        res.sendStatus(204);
       }
     }
-  )
+  );
  });
 
  app.delete("/api/movies/:id", (req,res) => {
@@ -135,7 +139,9 @@ app.post("/api/users", (req, res) => {
       console.error(err);
       res.status(500).send('Error saving the movie')
     } else {
-      res.status(200).send('Users successfully saved');
+      const id = result.insertId;
+      const createdUser = { id, firstname, lastname, email};
+      res.status(201).json(createdUser);
     }
   });
 });
@@ -149,11 +155,12 @@ app.put("/api/users/:userId", (req, res) => {
       if (err) {
         console.error(err);
         res.status(500).send('Error udating a user')
+      } else if (result.affectedRows === 0 ){
+        res.status(404).send(`User with id ${userId} not found`)
       } else {
-        res.status(200).send('Users updated successfully')
+        res.sendStatus(204);
       }
-    }
-  )
+    });
  });
 
  app.delete("/api/users/:id", (req,res) => {

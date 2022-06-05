@@ -1,6 +1,7 @@
 const connection = require('../db-config');
 const Joi = require('joi');
-const argon2 = require('argon2');
+const { hashPassword } = require('../helpers/argonHelpers');
+const { calculateToken } = require('../helpers/cryptoHelpers');
 
 const db = connection.promise();
 
@@ -13,6 +14,7 @@ const validate = (data, forCreation = true) => {
     city: Joi.string().allow(null, '').max(255),
     language: Joi.string().allow(null, '').max(255),
     password: Joi.string().min(8).max(255).presence(presence),
+    token: Joi.string().allow(null, '').max(255),
   }).validate(data, { abortEarly: false }).error;
 };
 
@@ -45,17 +47,25 @@ const findByEmailWithDifferentId = (email, id) => {
     .then(([results]) => results[0]);
 };
 
-const create = ({ firstname, lastname, email, city, language, password }) => {
+const create = ({ firstname, lastname, email, city, language, password, token}) => {
   return hashPassword(password).then((hashedPassword) => {
-    return db.query('INSERT INTO users SET ?', {firstname, lastname, email, city, language, hashedPassword}).then(([result]) => {
+    const token = calculateToken(email)
+    return db
+    .query('INSERT INTO users SET ?', {firstname, lastname, email, city, language, hashedPassword, token})
+    .then(([result]) => {
       const id = result.insertId;
-      return { id, firstname, lastname, email, city, language, hashedPassword };
+      return { id, firstname, lastname, email, city, language };
   })
   });
 };
 
 const update = (id, newAttributes) => {
-  return db.query('UPDATE users SET ? WHERE id = ?', [newAttributes, id]);
+  if ("email" in newAttributes){
+    const token = calculateToken(newAttributes.email)
+      return db.query('UPDATE users SET ?, token = ? WHERE id = ?', [newAttributes, token, id]);
+    } else {
+      return db.query('UPDATE users SET ? WHERE id = ?', [newAttributes, id]);
+    }
 };
 
 const destroy = (id) => {
@@ -64,20 +74,6 @@ const destroy = (id) => {
     .then(([result]) => result.affectedRows !== 0);
 };
 
-const hashingOptions = {
-  type: argon2.argon2id,
-  memoryCost: 2 ** 16,
-  timeCost: 5,
-  parallelism: 1
-};
-
-const hashPassword = (plainPassword) => {
-  return argon2.hash(plainPassword, hashingOptions);
-};
-
-const verifyPassword = (plainPassword, hashedPassword) => {
-  return argon2.verify(hashedPassword, plainPassword, hashingOptions);
-};
 
 module.exports = {
   findMany,
@@ -88,6 +84,4 @@ module.exports = {
   destroy,
   findByEmail,
   findByEmailWithDifferentId,
-  hashPassword,
-  verifyPassword,
 };

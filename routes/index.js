@@ -1,6 +1,6 @@
 const moviesRouter = require('./movies');
 const usersRouter = require('./users');
-const checkCredentialsRouter = require('./checkCredentials')
+const authRouter = require('./auth')
 
 const setupRoutes = (app) => {
   // Movie routes
@@ -9,7 +9,7 @@ const setupRoutes = (app) => {
   // TODO
   app.use('/api/users', usersRouter);
 
-  app.use('/api/auth', checkCredentialsRouter);
+  app.use('/api/auth', authRouter);
 };
 
 module.exports = {

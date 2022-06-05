@@ -61,7 +61,7 @@ usersRouter.put('/:id', (req, res) => {
       if (otherUserWithEmail) return Promise.reject('DUPLICATE_EMAIL');
       validationErrors = User.validate(req.body, false);
       if (validationErrors) return Promise.reject('INVALID_DATA');
-      return User.update(req.params.id, req.body);
+      return User.update(req.params.id, req.body,);
     })
     .then(() => {
       res.status(200).json({ ...existingUser, ...req.body });

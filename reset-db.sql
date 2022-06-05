@@ -8,7 +8,7 @@ CREATE TABLE `movies` (
     `color` tinyint(1) NOT NULL,
     `duration` int NOT NULL,
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+);
 
 INSERT INTO
     `movies` (title, director, year, color, duration)
@@ -60,14 +60,21 @@ CREATE TABLE `users` (
     `city` varchar(255) DEFAULT NULL,
     `language` varchar(255) DEFAULT NULL,
     `hashedPassword` varchar(255) NOT NULL,
+    `token` varchar(255),
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 7 DEFAULT CHARSET = utf8;
+);
 
 INSERT INTO
-    `users`
+    `users` (
+        firstname,
+        lastname,
+        email,
+        city,
+        language,
+        hashedPassword
+    )
 VALUES
     (
-        1,
         'John',
         'Doe',
         'john.doe@example.com',
@@ -75,7 +82,6 @@ VALUES
         'English',
         "$argon2id$v=19$m=16,t=2,p=1$emVmZXpmemZlemVmZWR6ZXplZg$rqZkhxu5YbqCGHPNrjJZpQ"
     ),(
-        2,
         'Valeriy',
         'Appius',
         'valeriy.ppius@example.com',
@@ -83,7 +89,6 @@ VALUES
         'Russian',
         '$argon2id$v=19$m=16,t=2,p=1$emVmemVmemZlemZ6ZnpmZQ$eSetR6KPUNAGW+q+wDadcw'
     ),(
-        3,
         'Ralf',
         'Geronimo',
         'ralf.geronimo@example.com',
@@ -91,7 +96,6 @@ VALUES
         'Italian',
         '$argon2id$v=19$m=16,t=2,p=1$emVmemVmemZlemZ6ZnpmZXphZGF6ZGQ$a0bg5DZB6H6v3jjQC81DXg'
     ),(
-        4,
         'Maria',
         'Iskandar',
         'maria.iskandar@example.com',
@@ -99,7 +103,6 @@ VALUES
         'German',
         '$argon2id$v=19$m=16,t=2,p=1$emVmemVmemZlenplZHpkZnpmemZlemFkYXpkZA$V1qAnJDyMuuWG7g9yoGYXA'
     ),(
-        5,
         'Jane',
         'Doe',
         'jane.doe@example.com',
@@ -107,7 +110,6 @@ VALUES
         'English',
         '$argon2id$v=19$m=16,t=2,p=1$emVmemVmemZlenplZHpkZGZ6ZnpmZXphZGF6ZGQ$VCzq45PL9t8khtc44Kk5iw'
     ),(
-        6,
         'Johanna',
         'Martino',
         'johanna.martino@example.com',

@@ -7,7 +7,9 @@ CREATE TABLE `movies` (
     `year` varchar(255) NOT NULL,
     `color` tinyint(1) NOT NULL,
     `duration` int NOT NULL,
-    PRIMARY KEY (`id`)
+    `users_id` int NOT NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_movies_users` FOREIGN KEY (`users_id`) REFERENCES `films`.`users`(`id`)
 );
 
 INSERT INTO

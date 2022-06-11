@@ -11,6 +11,7 @@ const validate = (data, forCreation = true) => {
     year: Joi.number().integer().min(1888).presence(presence),
     color: Joi.boolean().presence(presence),
     duration: Joi.number().integer().min(1).presence(presence),
+    users_id: Joi.number(),
   }).validate(data, { abortEarly: false }).error;
 };
 
@@ -38,15 +39,15 @@ const findOne = (id) => {
     .then(([results]) => results[0]);
 };
 
-const create = ({ title, director, year, color, duration }) => {
+const create = ({ title, director, year, color, duration, users_id }) => {
   return db
     .query(
-      'INSERT INTO movies (title, director, year, color, duration) VALUES (?, ?, ?, ?, ?)',
-      [title, director, year, color, duration]
+      'INSERT INTO movies (title, director, year, color, duration, users_id) VALUES (?, ?, ?, ?, ?, ?)',
+      [title, director, year, color, duration, users_id]
     )
     .then(([result]) => {
       const id = result.insertId;
-      return { id, title, director, year, color, duration };
+      return { id, title, director, year, color, duration, users_id };
     });
 };
 

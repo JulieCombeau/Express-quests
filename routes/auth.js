@@ -11,10 +11,10 @@ const { email, password } = req.body;
         } else {
             verifyPassword(password, user.hashedPassword).then((verification) => {
                 if (verification) {
-                    // const token = calculateToken(email);
-                    // User.update(user.id, { token: token })
-                    // res.cookie('user_token', token)
-                    res.send(calculateToken(email))
+                    const token = calculateToken(email);
+                    User.update(user.id, { token: token })
+                    res.cookie('user_token', token)
+                    res.send()
                 } else {
                     res.status(401).send("Invalid credentials")
                 }
